@@ -11,7 +11,6 @@ if len(key) != 8:
   print("Panjang key harus 8 karakter")
   exit()
 
-# call DES function
-desFunction = DES.DES()
-# encrypt the plaintext
-desFunction.encrypt(plainText, key)
+# buat instance CBC
+cbc = CBC.CBC()
+cbc.encrypt(plainText, key)
