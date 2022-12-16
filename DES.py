@@ -13,37 +13,29 @@ class DES:
 
   
   def encrypt(self, plaintext, key):
-    # check the plainText is can be divided by 8
-    if len(plaintext) % 8 != 0:
-      # add padding to the plaintext
-      plaintext += "0" * (8 - len(plaintext) % 8)
-
-    # turn plaintext to hex
-    plaintext = binascii.hexlify(plaintext.encode('utf-8'))
-    print(plaintext)
-
-    # buat 64-bit block dari plaintext    
-    plaintext = [plaintext[i:i+8] for i in range(0, len(plaintext), 8)]
-    key = ''.join(format(ord(i), '08b') for i in key)
-
     # Proses Encrypt DES
     # Step (1) initial permutation untuk tiap 64-bit block
-    # for i in range(len(plaintext)):
-    #   plaintext[i] = self.initPermutation(plaintext[i])
+    for i in range(len(plaintext)):
+      plaintext[i] = self.initPermutation(plaintext[i])
+      print(plaintext[i])
 
     # Step (2) Split 64-bit block menjadi 2 bagian 32-bit
-    
-
-    for block in plaintext:
-      print(block)
+    # Step (3) Proses Feistel Cipher
+  
 
   def initPermutation(self, plaintext):
+    result = ''
+    # change the plaintext to binary
+    plaintext = self.hexToBinary(plaintext)
     for i in range(len(self.IP)):
-      for j in range(len(self.IP[i])):
-        self.IP[i][j] = plaintext[self.IP[i][j] - 1]
+      result += plaintext[self.IP[i]-1]
+    return result
 
   def stringToBinary(self, string):
     return ''.join(format(ord(i), '08b') for i in string)
+
+  def hexToBinary(self, hex):
+    return bin(int(hex, 16))[2:].zfill(64)
 
   def decrypt(self, plaintext, key):
     # ...

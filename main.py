@@ -1,4 +1,5 @@
-import DES 
+import CBC
+import DES
 
 # take user input and print it
 plainText = input("Enter the text to be encrypted: ")
