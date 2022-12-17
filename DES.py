@@ -47,6 +47,40 @@ class DES:
     ciphertext = self.inverseInitPermutation(leftRight)
     return ciphertext
 
+  def decrypt(self, ciphertext, key):
+    # Proses Decrypt DES
+    # Step (1) initial permutation untuk blok 64-bit
+    ciphertext_ip = self.initPermutation(ciphertext)
+
+    # Step (2) Split 64-bit block menjadi 2 bagian 32-bit
+    left = ciphertext_ip[:32]
+    right = ciphertext_ip[32:]
+
+    # Step (3) Proses Feistel
+    # Step (3.1) Generate Round Key
+    for i in range(0, 16):
+      if(i == 0):
+        cKey, dKey = self.generateRoundKeyPC1(key)
+      # Leftshift CKey dan DKey
+      keyShift = getattr(self.matrixCollection, 'keyShift')
+      cKey = cKey[keyShift[i]:] + cKey[:keyShift[i]]
+      dKey = dKey[keyShift[i]:] + dKey[:keyShift[i]]
+      # Gabungkan CKey dan DKey lalu permutasi PC-2
+      newKey = cKey + dKey
+      newKey = self.generateRoundKeyPC2(newKey)
+      self.roundKey.append(newKey)
+
+    # Step(3.2) Proses Inti Feistel
+    for i in range (0,16):
+      resultF = self.fungsiF(left, self.roundKey[15-i])
+      rightXOR = int(right, 2) ^ int(resultF, 2)
+      right = left
+      left = self.decToBinary(rightXOR, 32)
+
+    # Step(4) Inverse Initial Permutation
+    leftRight = left + right
+    plaintext = self.inverseInitPermutation(leftRight)
+    return plaintext
   
   def initPermutation(self, plaintext):
     IP = getattr(self.matrixCollection, 'IP')
@@ -112,8 +146,4 @@ class DES:
 
   def decToBinary(self, dec, bit):
     return bin(dec)[2:].zfill(bit)
-
-  def decrypt(self, plaintext, key):
-    # ...
-    print("Test Decrypt")
   

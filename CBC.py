@@ -41,12 +41,40 @@ class CBC:
         plaintext_xor = int(self.hexToBinary(IV, 64), 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       else:
-        plaintext_xor = int(ciphertext[i-1], 2) ^ int(plaintext[i], 2)
+        plaintext_xor = int(plaintext[i-1], 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       ciphertext.append(
           desFunction.encrypt(self.decToBinary(plaintext_xor, 64), key)
       )
-    print(self.binToHex(ciphertext[0]))
+    
+    ciphertext = ''.join(ciphertext)
+    ciphertext = self.binToHex(ciphertext)
+    print(ciphertext, '('+str(len(ciphertext))+')')
+
+  def decrypt(self, ciphertext, key):
+    key = binascii.hexlify(key.encode('utf-8'))
+
+    # Buat 64-bit block dari ciphertext    
+    ciphertext = [ciphertext[i:i+16] for i in range(0, len(ciphertext), 16)]
+
+    # Step (1) Buat IV (Initialization Vector) dengan panjang 64-bit
+    IV = self.generateIV()
+    # Step(2) Lakukan Operasi DES-CBC
+    plaintext = []
+    desFunction = DES.DES()
+    key = self.hexToBinary(key.decode('utf-8'), 64)
+    for i in range(len(ciphertext)):
+      ciphertext[i] = self.hexToBinary(ciphertext[i], 64)
+      resultDES = desFunction.decrypt(ciphertext[i], key)
+      if(i==0):
+        plaintextXOR = int(self.hexToBinary(IV, 64), 2) ^ int(resultDES, 2)
+      else:
+        plaintextXOR = int(ciphertext[i-1], 2) ^ int(resultDES, 2)
+      plaintext.append(self.decToBinary(plaintextXOR, 64))
+    
+    plaintext = ''.join(plaintext)
+    plaintext = self.binToHex(plaintext)
+    print(plaintext, '('+str(len(plaintext))+')')
 
   def generateIV(self):
     return secrets.token_hex(8)
