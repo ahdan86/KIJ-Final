@@ -30,28 +30,31 @@ class CBC:
     desFunction = DES.DES()
     key = self.hexToBinary(key.decode('utf-8'), 64)
     for i in range(len(plaintext)):
-      
       # ================== BUAT DEBUG YGY ==================
-      # print(bin(int(plaintext[i], 16)))
-      # print(self.hexToBinary(plaintext[i].decode('utf-8')))
-      # print(self.hexToBinary(plaintext[i]))
-      # print(IV)
-      # print(self.hexToBinary(IV))
+      # print(self.hexToBinary(plaintext[i].decode('utf-8'), 64))
+      # print(self.hexToBinary(IV, 64))
+      # ====================================================
 
       plaintext[i] = self.hexToBinary(plaintext[i].decode('utf-8'), 64)
       if(i == 0):
         plaintext_xor = int(self.hexToBinary(IV, 64), 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       else:
-        plaintext_xor = int(plaintext[i-1], 2) ^ int(plaintext[i], 2)
+        plaintext_xor = int(ciphertext[i-1], 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       ciphertext.append(
           desFunction.encrypt(self.decToBinary(plaintext_xor, 64), key)
       )
     
-    ciphertext = ''.join(ciphertext)
-    ciphertext = self.binToHex(ciphertext)
-    print(ciphertext, '('+str(len(ciphertext))+')')
+    # ciphertext = ''.join(ciphertext)
+    # ciphertext = self.binToHex(ciphertext)
+    # print(ciphertext, '('+str(len(ciphertext))+')')
+    result = ''
+    for i in ciphertext:
+      print(i)
+      result += self.binToHex(i)
+    print(result, '('+str(len(result))+')')
+
 
   def decrypt(self, ciphertext, key):
     key = binascii.hexlify(key.encode('utf-8'))
@@ -79,7 +82,7 @@ class CBC:
     
     plaintext = ''.join(plaintext)
     plaintext = self.binToHex(plaintext)
-    print(plaintext)
+    print(plaintext, '('+str(len(plaintext))+')')
     print(self.hexToPlain(plaintext))
 
   def generateIV(self):
