@@ -46,7 +46,7 @@ class CBC:
       ciphertext.append(
           desFunction.encrypt(self.decToBinary(plaintext_xor, 64), key)
       )
-    print((ciphertext[0]))
+    print(self.binToHex(ciphertext[0]))
 
   def generateIV(self):
     return secrets.token_hex(8)
@@ -56,4 +56,7 @@ class CBC:
 
   def decToBinary(self, dec, bit):
     return bin(dec)[2:].zfill(bit)
+
+  def binToHex(self, bin):
+    return hex(int(bin, 2))[2:].zfill(16)
   

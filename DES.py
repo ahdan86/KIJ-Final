@@ -107,7 +107,7 @@ class DES:
     IPinverse = getattr(self.matrixCollection, 'IPinverse')
     result = ''
     for i in range(len(IPinverse)):
-      result += block
+      result += block[IPinverse[i]-1]
     return result  
 
   def decToBinary(self, dec, bit):
