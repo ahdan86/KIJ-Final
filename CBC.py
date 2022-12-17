@@ -26,7 +26,7 @@ class CBC:
     # Step(2) Lakukan Operasi DES-CBC
     ciphertext = []
     desFunction = DES.DES()
-    key = self.hexToBinary(key.decode('utf-8'))
+    key = self.hexToBinary(key.decode('utf-8'), 64)
     for i in range(len(plaintext)):
       
       # ================== BUAT DEBUG YGY ==================
@@ -36,21 +36,24 @@ class CBC:
       # print(IV)
       # print(self.hexToBinary(IV))
 
-      plaintext[i] = self.hexToBinary(plaintext[i].decode('utf-8'))
+      plaintext[i] = self.hexToBinary(plaintext[i].decode('utf-8'), 64)
       if(i == 0):
-        plaintext_xor = int(self.hexToBinary(IV), 2) ^ int(plaintext[i], 2)
+        plaintext_xor = int(self.hexToBinary(IV, 64), 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       else:
         plaintext_xor = int(ciphertext[i-1], 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
-      desFunction.encrypt(self.decToBinary(plaintext_xor), key)
+      ciphertext.append(
+          desFunction.encrypt(self.decToBinary(plaintext_xor, 64), key)
+      )
+    print((ciphertext[0]))
 
   def generateIV(self):
     return secrets.token_hex(8)
 
-  def hexToBinary(self, hex):
-    return bin(int(hex, 16))[2:].zfill(64)
+  def hexToBinary(self, hex, bit):
+    return bin(int(hex, 16))[2:].zfill(bit)
 
-  def decToBinary(self, dec):
-    return bin(dec)[2:].zfill(64)
+  def decToBinary(self, dec, bit):
+    return bin(dec)[2:].zfill(bit)
   
