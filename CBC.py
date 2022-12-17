@@ -12,8 +12,9 @@ class CBC:
     if(len(plaintext) % 8 != 0):
       plaintext += "0" * (8 - len(plaintext) % 8)
     
-    #Ubah plaintext ke dalam bentuk hex
+    #Ubah plaintext dan key ke dalam bentuk hex
     plaintext = binascii.hexlify(plaintext.encode('utf-8'))
+    key = binascii.hexlify(key.encode('utf-8'))
     
     # Buat 64-bit block dari plaintext    
     plaintext = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
@@ -25,6 +26,7 @@ class CBC:
     # Step(2) Lakukan Operasi DES-CBC
     ciphertext = []
     desFunction = DES.DES()
+    key = self.hexToBinary(key.decode('utf-8'))
     for i in range(len(plaintext)):
       
       # ================== BUAT DEBUG YGY ==================
@@ -42,10 +44,6 @@ class CBC:
         plaintext_xor = int(ciphertext[i-1], 2) ^ int(plaintext[i], 2)
         # print(len(self.decToBinary(plaintext_xor)))
       desFunction.encrypt(self.decToBinary(plaintext_xor), key)
-
-
-    # Buat instance DES
-    des = DES.DES()
 
   def generateIV(self):
     return secrets.token_hex(8)
