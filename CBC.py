@@ -22,11 +22,14 @@ class CBC:
     # Step (1) Buat IV (Initialization Vector) dengan panjang 64-bit
     IV = self.generateIV()
 
-    # Step(2) Lakukan Operasi CBC
+    # Step(2) Lakukan Operasi DES-CBC
+    ciphertext = []
+    desFunction = DES.DES()
     for i in range(len(plaintext)):
       
       # ================== BUAT DEBUG YGY ==================
       # print(bin(int(plaintext[i], 16)))
+      # print(self.hexToBinary(plaintext[i].decode('utf-8')))
       # print(self.hexToBinary(plaintext[i]))
       # print(IV)
       # print(self.hexToBinary(IV))
@@ -34,7 +37,12 @@ class CBC:
       plaintext[i] = self.hexToBinary(plaintext[i].decode('utf-8'))
       if(i == 0):
         plaintext_xor = int(self.hexToBinary(IV), 2) ^ int(plaintext[i], 2)
-        print("Hasil plaintext_xor" , str(plaintext_xor))
+        # print(len(self.decToBinary(plaintext_xor)))
+      else:
+        plaintext_xor = int(ciphertext[i-1], 2) ^ int(plaintext[i], 2)
+        # print(len(self.decToBinary(plaintext_xor)))
+      desFunction.encrypt(self.decToBinary(plaintext_xor), key)
+
 
     # Buat instance DES
     des = DES.DES()
@@ -47,3 +55,4 @@ class CBC:
 
   def decToBinary(self, dec):
     return bin(dec)[2:].zfill(64)
+  

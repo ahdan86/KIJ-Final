@@ -1,4 +1,3 @@
-import binascii
 class DES:
   def __init__(self):
     # matriks untuk IP (Initial Permutation)
@@ -31,6 +30,15 @@ class DES:
                 30, 40, 51, 45, 33, 48,
                 44, 49, 39, 56, 34, 53,
                 46, 42, 50, 36, 29, 32]
+
+    self.expansionMatrix = [32, 1, 2, 3, 4, 5,
+                            4, 5, 6, 7, 8, 9,
+                            8, 9, 10, 11, 12, 13,
+                            12, 13, 14, 15, 16, 17,
+                            16, 17, 18, 19, 20, 21,
+                            20, 21, 22, 23, 24, 25,
+                            24, 25, 26, 27, 28, 29,
+                            28, 29, 30, 31, 32, 1]
 # 
   def encrypt(self, plaintext, key):
     # Proses Encrypt DES
@@ -53,11 +61,8 @@ class DES:
       result += plaintext[self.IP[i]-1]
     return result
 
-  def stringToBinary(self, string):
-    return ''.join(format(ord(i), '08b') for i in string)
-
-  def hexToBinary(self, hex):
-    return bin(int(hex, 16))[2:].zfill(64)
+  def decToBinary(self, dec):
+    return bin(dec)[2:].zfill(64)
 
   def decrypt(self, plaintext, key):
     # ...
