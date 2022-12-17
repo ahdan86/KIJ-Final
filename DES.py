@@ -30,6 +30,13 @@ class DES:
       newKey = self.generateRoundKeyPC2(newKey)
       self.roundKey.append(newKey)
 
+    # Step(3.2) Proses Inti Feistel
+    for i in range (0,16):
+      resultF = self.fungsiF(right, self.roundKey[i])
+      leftXOR = int(left, 2) ^ int(resultF, 2)
+      left = right
+      right = self.decToBinary(leftXOR)
+    
     print(self.roundKey)
   
   def initPermutation(self, plaintext):
@@ -58,6 +65,20 @@ class DES:
     for i in range(len(PC2)):
       result += key[PC2[i]-1]
     return result
+
+  def fungsiF(self, block, key):
+    # Ekspansi block menjadi 48 bit
+    newBlock = ''
+    expansionMatrix = getattr(self.matrixCollection, 'expansionMatrix')
+    for i in range(len(expansionMatrix)):
+      newBlock += block[expansionMatrix[i]-1]
+    # Operasi XOR dengan key-i
+    newBlock = int(newBlock, 2) ^ int(key, 2)
+    newBlock = self.decToBinary(newBlock)
+    # Buat 6-bit block dari newBlock dan dilakukan subtitusi S-box
+    newBlock = [newBlock[i:i+6] for i in range(0, len(newBlock), 6)]
+    for i in range(0, 8):
+      # TODO(nganu s-box)
 
   def decToBinary(self, dec):
     return bin(dec)[2:].zfill(64)
