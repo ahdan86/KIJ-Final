@@ -21,7 +21,9 @@ class CBC:
 
     # Operasi enkripsi CBC
     # Step (1) Buat IV (Initialization Vector) dengan panjang 64-bit
-    IV = self.generateIV()
+    # IV = self.generateIV()
+    IV = "12345678"
+    IV = binascii.hexlify(IV.encode('utf-8'))
 
     # Step(2) Lakukan Operasi DES-CBC
     ciphertext = []
@@ -58,7 +60,10 @@ class CBC:
     ciphertext = [ciphertext[i:i+16] for i in range(0, len(ciphertext), 16)]
 
     # Step (1) Buat IV (Initialization Vector) dengan panjang 64-bit
-    IV = self.generateIV()
+    # IV = self.generateIV()
+    IV = "12345678"
+    IV = binascii.hexlify(IV.encode('utf-8'))
+
     # Step(2) Lakukan Operasi DES-CBC
     plaintext = []
     desFunction = DES.DES()
@@ -74,7 +79,8 @@ class CBC:
     
     plaintext = ''.join(plaintext)
     plaintext = self.binToHex(plaintext)
-    print(plaintext, '('+str(len(plaintext))+')')
+    print(plaintext)
+    print(self.hexToPlain(plaintext))
 
   def generateIV(self):
     return secrets.token_hex(8)
@@ -87,4 +93,7 @@ class CBC:
 
   def binToHex(self, bin):
     return hex(int(bin, 2))[2:].zfill(16)
+
+  def hexToPlain(self, hex):
+    return (binascii.unhexlify(hex)).decode('ascii')
   

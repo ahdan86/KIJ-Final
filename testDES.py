@@ -11,7 +11,7 @@ def hexToPlain(hex):
   return (binascii.unhexlify(hex)).decode('ascii')
 
 desFunction = DES.DES()
-plaintext = 'AHDAN Ai'
+plaintext = 'A'
 key = '12345678'
 
 plaintext = binascii.hexlify(plaintext.encode('utf-8'))
@@ -25,5 +25,6 @@ print(ciphertext)
 
 ciphertext = hexToBinary(ciphertext, 64)
 decrypted = binToHex(desFunction.decrypt(ciphertext, key))
+print(decrypted)
 print(hexToPlain(decrypted))
 
