@@ -52,7 +52,6 @@ class CBC:
     # print(ciphertext, '('+str(len(ciphertext))+')')
     result = ''
     for i in ciphertext:
-      print(i)
       result += self.binToHex(i)
     print(result, '('+str(len(result))+')')
 
