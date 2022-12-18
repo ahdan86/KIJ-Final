@@ -7,13 +7,14 @@ class CBC:
     pass
 
   def encrypt(self, plaintext, key):
-    # Jika panjang plaintext tidak habis dibagi 8(bukan kelipatan 64-bit)
-    # maka tambahkan 0 (padding) di belakang plaintext
-    if(len(plaintext) % 8 != 0):
-      plaintext += "0" * (8 - len(plaintext) % 8)
-    
     #Ubah plaintext dan key ke dalam bentuk hex
     plaintext = binascii.hexlify(plaintext.encode('utf-8'))
+
+    # tambahkan padding jika panjang plaintext kurang dari 64-bit
+    if(len(plaintext) % 16 != 0):
+      padding = 16 - (len(plaintext) % 16)
+      plaintext += b'0' * padding
+
     key = binascii.hexlify(key.encode('utf-8'))
     
     # Buat 64-bit block dari plaintext    
