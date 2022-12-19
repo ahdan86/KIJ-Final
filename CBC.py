@@ -54,7 +54,7 @@ class CBC:
     result = ''
     for i in ciphertext:
       result += Util.binToHex(i)
-    print(result, '('+str(len(result))+')')
+    print(result)
 
 
   def decrypt(self, ciphertext, key):
@@ -83,7 +83,7 @@ class CBC:
     
     plaintext = ''.join(plaintext)
     plaintext = Util.binToHex(plaintext)
-    print(plaintext, '('+str(len(plaintext))+')')
+    # print(plaintext, '('+str(len(plaintext))+')')
     print(Util.hexToPlain(plaintext))
 
   def generateIV(self):
