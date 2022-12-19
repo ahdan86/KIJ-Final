@@ -1,4 +1,6 @@
 import MatrixCollection
+import Util
+
 class DES:
   def __init__(self):
     self.matrixCollection = MatrixCollection.MatrixCollection()
@@ -37,10 +39,10 @@ class DES:
       # print("=======")
       # print(resultF)
       # print(left)
-      # print(self.decToBinary(leftXOR, 32))
+      # print(Util.decToBinary(leftXOR, 32))
       # print("=======")
       left = right
-      right = self.decToBinary(leftXOR, 32)
+      right = Util.decToBinary(leftXOR, 32)
     
     # Step(4) Inverse Initial Permutation
     leftRight = left + right
@@ -75,7 +77,7 @@ class DES:
       resultF = self.fungsiF(left, self.roundKey[15-i])
       rightXOR = int(right, 2) ^ int(resultF, 2)
       right = left
-      left = self.decToBinary(rightXOR, 32)
+      left = Util.decToBinary(rightXOR, 32)
 
     # Step(4) Inverse Initial Permutation
     leftRight = left + right
@@ -118,7 +120,7 @@ class DES:
 
     # Operasi XOR dengan key-i
     newBlock = int(newBlock, 2) ^ int(key, 2)
-    newBlock = self.decToBinary(newBlock, 48)
+    newBlock = Util.decToBinary(newBlock, 48)
 
     # Buat 6-bit block dari newBlock dan dilakukan subtitusi S-box
     newBlock = [newBlock[i:i+6] for i in range(0, len(newBlock), 6)]
@@ -127,7 +129,7 @@ class DES:
       sbox = getattr(self.matrixCollection, index)
       outerBit = int(newBlock[i][0] + newBlock[i][5], 2)
       innerBit = int(newBlock[i][1:5], 2)
-      newBlock[i] = self.decToBinary(sbox[outerBit][innerBit], 4)
+      newBlock[i] = Util.decToBinary(sbox[outerBit][innerBit], 4)
     newBlock = ''.join(newBlock)
 
     # Permutasi P-box
