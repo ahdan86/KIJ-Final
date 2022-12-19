@@ -14,7 +14,7 @@ class SHA512:
     # Tambah '1' bit
     self._plaintextLength = len(plaintext)
     plaintext += '1'
-    # Tambah padding '0' bit sebanyak
+    # Tambah padding '0' bit sehingga panjang plaintext % 1024 = 896
     while(len(plaintext) % 1024 != 896):
       plaintext += '0'
     # tambahkan panjang plaintext
